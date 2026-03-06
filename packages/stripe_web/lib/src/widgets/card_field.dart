@@ -51,13 +51,16 @@ class WebCardField extends StatefulWidget {
 
 class WebStripeCardState extends State<WebCardField> with CardFieldContext {
   CardEditController get controller => widget.controller;
+  late String _viewType;
+  String get _divId => 'card-element-$_viewType';
 
   @override
   void initState() {
+    _viewType='stripe_card_${DateTime.now().millisecondsSinceEpoch}';
     ui.platformViewRegistry.registerViewFactory(
-      'stripe_card',
+      _viewType,
       (int viewId) => web.HTMLDivElement()
-        ..id = 'card-element'
+        ..id = _divId
         ..style.border = 'none',
     );
     initStripe();
@@ -86,7 +89,7 @@ class WebStripeCardState extends State<WebCardField> with CardFieldContext {
           element = WebStripe.js
               .elements(createElementOptions())
               .createCard(createOptions())
-            ..mount('#card-element'.toJS)
+            ..mount('#$_divId'.toJS)
             ..onBlur(requestBlur)
             ..onFocus(requestFocus)
             ..onChange(onCardChanged);
@@ -131,7 +134,7 @@ class WebStripeCardState extends State<WebCardField> with CardFieldContext {
         focusNode: _effectiveNode,
         child: ConstrainedBox(
           constraints: constraints,
-          child: const HtmlElementView(viewType: 'stripe_card'),
+          child: const HtmlElementView(viewType: _viewType),
         ),
       ),
     );
