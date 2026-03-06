@@ -134,7 +134,7 @@ class WebStripeCardState extends State<WebCardField> with CardFieldContext {
         focusNode: _effectiveNode,
         child: ConstrainedBox(
           constraints: constraints,
-          child: const HtmlElementView(viewType: _viewType),
+          child: HtmlElementView(viewType: _viewType),
         ),
       ),
     );
